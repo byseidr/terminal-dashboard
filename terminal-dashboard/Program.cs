@@ -7,7 +7,12 @@ namespace terminal_dashboard
 {
     class Program
     {
-        public static int HWND_BOTTOM = 1;
+        private static Dictionary<string, int> zPos = new Dictionary<string, int>(){
+            {"bottom", 1},
+            {"top", 0},
+            {"topmost", -1},
+            {"notopmost", -2}
+        };
 
         // FindWindow
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
@@ -25,17 +30,17 @@ namespace terminal_dashboard
             // Terminal profile
             result.Add(profile[0]);
             // Window x value
-            result.Add(profile.Length > 1 ? Int32.Parse(profile[1]) : 200);
+            result.Add(profile.Length > 1 && !String.IsNullOrEmpty(profile[1]) ? Int32.Parse(profile[1]) : 200);
             // Window y value
-            result.Add(profile.Length > 2 ? Int32.Parse(profile[2]) : 100);
+            result.Add(profile.Length > 2 && !String.IsNullOrEmpty(profile[2]) ? Int32.Parse(profile[2]) : 100);
             // Window width
-            result.Add(profile.Length > 3 ? Int32.Parse(profile[3]) : 1000);
+            result.Add(profile.Length > 3 && !String.IsNullOrEmpty(profile[3]) ? Int32.Parse(profile[3]) : 1000);
             // Window height
-            result.Add(profile.Length > 4 ? Int32.Parse(profile[4]) : 600);
+            result.Add(profile.Length > 4 && !String.IsNullOrEmpty(profile[4]) ? Int32.Parse(profile[4]) : 600);
 
             // Window z reference
             // Defaults to bottommost position if not explicited
-            result.Add(profile.Length > 5 ? Int32.Parse(profile[5]) : HWND_BOTTOM);
+            result.Add(profile.Length > 5 ? zPos[profile[5]] : zPos["notopmost"]);
 
             return result;
         }
