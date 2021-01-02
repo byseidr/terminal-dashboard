@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace terminal_dashboard
 {
@@ -67,11 +68,11 @@ namespace terminal_dashboard
                     p.StartInfo.FileName = (string)profile[6];
                     p.StartInfo.Arguments = (string)profile[7] + "\"" + (string)profile[0] + "\"";
                     p.Start();
-                    while (FindWindow(null, (string)profile[0]) == IntPtr.Zero)
+                    if (SpinWait.SpinUntil(() => FindWindow(null, (string)profile[0]) != IntPtr.Zero, TimeSpan.FromSeconds(30)))
                     {
+                        IntPtr hwnd = FindWindow(null, (string)profile[0]);
+                        SetWindowPos(hwnd, (int)profile[5], (int)profile[1], (int)profile[2], (int)profile[3], (int)profile[4], 0x00);
                     }
-                    IntPtr hwnd = FindWindow(null, (string)profile[0]);
-                    SetWindowPos(hwnd, (int)profile[5], (int)profile[1], (int)profile[2], (int)profile[3], (int)profile[4], 0x00);
                 }
             }
         }
