@@ -37,10 +37,21 @@ namespace terminal_dashboard
             result.Add(profile.Length > 3 && !String.IsNullOrEmpty(profile[3]) ? Int32.Parse(profile[3]) : 1000);
             // Window height
             result.Add(profile.Length > 4 && !String.IsNullOrEmpty(profile[4]) ? Int32.Parse(profile[4]) : 600);
-
             // Window z reference
             // Defaults to bottommost position if not explicited
-            result.Add(profile.Length > 5 ? zPos[profile[5]] : zPos["notopmost"]);
+            result.Add(profile.Length > 5 && !String.IsNullOrEmpty(profile[5]) ? zPos[profile[5]] : zPos["notopmost"]);
+            // Terminal executable and option (if any)
+            // Defaults to Windows Terminal
+            if (profile.Length > 6 && !String.IsNullOrEmpty(profile[6]))
+            {
+                result.Add(profile[6]);
+                result.Add(profile.Length > 7 && !String.IsNullOrEmpty(profile[7]) ? profile[7] + " " : "");
+            }
+            else
+            {
+                result.Add("wt.exe");
+                result.Add("-p" + " ");
+            }
 
             return result;
         }
@@ -53,8 +64,8 @@ namespace terminal_dashboard
                 {
                     List<object> profile = getProfile(arg);
                     Process p = new Process();
-                    p.StartInfo.FileName = "wt.exe";
-                    p.StartInfo.Arguments = "-p \"" + (string)profile[0] + "\"";
+                    p.StartInfo.FileName = (string)profile[6];
+                    p.StartInfo.Arguments = (string)profile[7] + "\"" + (string)profile[0] + "\"";
                     p.Start();
                     while (FindWindow(null, (string)profile[0]) == IntPtr.Zero)
                     {
