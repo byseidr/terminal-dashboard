@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "terminal-dashboard": {
+      "commandName": "Project",
+      "commandLineArgs": "\"CMatrix Red\""
+    }
+  }
+}

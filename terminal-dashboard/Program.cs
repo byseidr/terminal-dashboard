@@ -25,24 +25,17 @@ namespace terminal_dashboard
             // Terminal profile
             result.Add(profile[0]);
             // Window x value
-            result.Add(Int32.Parse(profile[1]));
+            result.Add(profile.Length > 1 ? Int32.Parse(profile[1]) : 200);
             // Window y value
-            result.Add(Int32.Parse(profile[2]));
+            result.Add(profile.Length > 2 ? Int32.Parse(profile[2]) : 100);
             // Window width
-            result.Add(Int32.Parse(profile[3]));
+            result.Add(profile.Length > 3 ? Int32.Parse(profile[3]) : 1000);
             // Window height
-            result.Add(Int32.Parse(profile[4]));
+            result.Add(profile.Length > 4 ? Int32.Parse(profile[4]) : 600);
 
             // Window z reference
             // Defaults to bottommost position if not explicited
-            if (profile.Length > 5)
-            {
-                result.Add(Int32.Parse(profile[5]));
-            }
-            else
-            {
-                result.Add(HWND_BOTTOM);
-            }
+            result.Add(profile.Length > 5 ? Int32.Parse(profile[5]) : HWND_BOTTOM);
 
             return result;
         }
